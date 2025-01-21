@@ -1,0 +1,17 @@
+version: '3'
+
+tasks:
+  install:
+    desc: install the tool
+    cmds:
+      - dotnet pack src/CLI/CLI.csproj -o nupkg
+      - dotnet tool install --global --add-source ./nupkg bjornkpu.ai
+    silent: true
+
+  update:
+    desc: update the tool
+    cmds:
+      - dotnet pack src/CLI/CLI.csproj -o nupkg
+      - dotnet tool uninstall --global bjornkpu.ai
+      - dotnet tool update --global --add-source ./nupkg bjornkpu.ai
+    silent: true

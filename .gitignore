@@ -1,0 +1,17 @@
+﻿# Downloaded Content
+
+
+# Built Content
+bin/
+obj/
+nupkg/
+
+# User-specific Files
+.idea/
+*.DotSettings.user
+
+# Temp Files
+
+
+# Secrets
+appsettings.local.json
