@@ -1,0 +1,112 @@
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace McpClient;
+
+public class Config
+{
+    private static readonly string ConfigPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+        ".llm",
+        "config.json"
+    );
+
+    [JsonPropertyName("systemPrompt")] public string SystemPrompt { get; set; }
+
+    [JsonPropertyName("llm")] public LlmConfig Llm { get; set; }
+
+    [JsonPropertyName("mcpServers")] public Dictionary<string, McpConfig> McpServers { get; set; }
+
+    /// <summary>
+    ///     Gets the path to the configuration file.
+    /// </summary>
+    public static string GetConfigPath()
+    {
+        return ConfigPath;
+    }
+
+    /// <summary>
+    ///     Loads the configuration from the specified file path. If it doesn't exist, creates a default config.
+    /// </summary>
+    /// <returns>The configuration object</returns>
+    public static async Task<Config> LoadOrCreateAsync()
+    {
+        // Ensure the directory exists
+        var configDir = Path.GetDirectoryName(ConfigPath)
+                        ?? throw new InvalidOperationException("Invalid config path");
+        if (!Directory.Exists(configDir))
+        {
+            Directory.CreateDirectory(configDir);
+        }
+
+        // If the config file does not exist, create it with default values
+        if (!File.Exists(ConfigPath))
+        {
+            var defaultConfig = CreateDefault();
+            await SaveAsync(defaultConfig);
+        }
+
+        // Read and deserialize the file into a Config object
+        var json = await File.ReadAllTextAsync(ConfigPath);
+        return JsonSerializer.Deserialize<Config>(json)
+               ?? throw new InvalidOperationException("Failed to deserialize the config");
+    }
+
+    /// <summary>
+    ///     Saves the current configuration to the specified file.
+    /// </summary>
+    /// <param name="configPath">The path to the configuration file</param>
+    public static async Task SaveAsync(Config config)
+    {
+        var json = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(ConfigPath, json);
+    }
+
+    /// <summary>
+    ///     Creates a default configuration object with default values.
+    /// </summary>
+    /// <returns>The default configuration</returns>
+    public static Config CreateDefault()
+    {
+        return new Config
+        {
+            SystemPrompt = "You are an AI assistant helping a software engineer...",
+            Llm = new LlmConfig
+            {
+                Provider = "azureOpenAI",
+                Model = "gpt-4o-mini",
+                ApiKey = "your-azure-openai-api-key",
+                BaseUrl = "https://<your service>.cognitiveservices.azure.com"
+            },
+            McpServers = new Dictionary<string, McpConfig>
+            {
+                ["time"] = new()
+                {
+                    Enabled = true,
+                    Command = "podman",
+                    Args = ["run", "-i", "--rm", "mcp/time", "--local-timezone=Europe/Oslo"]
+                }
+            }
+        };
+    }
+}
+
+public class McpConfig
+{
+    [JsonPropertyName("enabled")] public bool Enabled { get; set; } = true;
+
+    [JsonPropertyName("command")] public string Command { get; set; }
+
+    [JsonPropertyName("args")] public string[] Args { get; set; }
+}
+
+public class LlmConfig
+{
+    [JsonPropertyName("provider")] public string Provider { get; set; }
+
+    [JsonPropertyName("model")] public string Model { get; set; }
+
+    [JsonPropertyName("api_key")] public string ApiKey { get; set; }
+
+    [JsonPropertyName("base_url")] public string BaseUrl { get; set; } // Optional
+}
