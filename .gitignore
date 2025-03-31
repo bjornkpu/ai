@@ -11,7 +11,8 @@ nupkg/
 *.DotSettings.user
 
 # Temp Files
-
+src/QuickstartWeatherServer
+src/QuickstartClient
 
 # Secrets
 appsettings.local.json
