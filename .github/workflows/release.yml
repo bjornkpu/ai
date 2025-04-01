@@ -20,13 +20,10 @@ jobs:
         with:
           dotnet-version: '9.x' # Adjust based on your .NET version
 
-      # Navigate to the Tool project directory
-      - name: Navigate to project directory
-        working-directory: src/McpClient
-
       # Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
+        working-directory: src/McpClient
 
       # Extract version from Git tag
       - name: Extract version from tag
@@ -36,9 +33,11 @@ jobs:
       # Pack the tool
       - name: Pack NuGet package
         run: dotnet pack --configuration Release /p:PackageVersion=${{ env.PACKAGE_VERSION }}
+        working-directory: src/McpClient
 
       # Publish to NuGet
       - name: Push package to NuGet
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push ./bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        working-directory: src/McpClient
