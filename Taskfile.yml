@@ -1,17 +1,24 @@
 version: '3'
 
 tasks:
-  install:
-    desc: install the tool
+  pack:
+    desc: Pack the tool into a local NuGet package for testing
     cmds:
-      - dotnet pack src/CLI/CLI.csproj -o nupkg
-      - dotnet tool install --global --add-source ./nupkg bjornkpu.ai
-    silent: true
+      - echo "Packing tool locally for testing..."
+      - cd src/McpClient
+      - dotnet pack --configuration Debug --output ./nupkg
 
-  update:
-    desc: update the tool
+  install:
+    desc: Install the tool globally from the locally packed NuGet package
+    deps: [pack]
     cmds:
-      - dotnet pack src/CLI/CLI.csproj -o nupkg
+      - echo "Uninstalling the existing global version of the tool (if any)..."
       - dotnet tool uninstall --global bjornkpu.ai
-      - dotnet tool update --global --add-source ./nupkg bjornkpu.ai
-    silent: true
+      - echo "Installing the tool from the local package..."
+      - dotnet tool install --global --add-source ./nupkg bjornkpu.ai
+
+  uninstall:
+    desc: Uninstall the tool globally
+    cmds:
+      - echo "Uninstalling the globally installed tool..."
+      - dotnet tool uninstall --global bjornkpu.ai
