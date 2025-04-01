@@ -71,6 +71,13 @@ public class Commands(McpClientService mcpClientService, AzureOpenAIService azur
         }
     }
 
+    [Command(Description = "Display the current version of the CLI.")]
+    public void Version()
+    {
+        Console.WriteLine("ai v1.0.0");
+    }
+
+
     [Command(Description = "Test MCP client connections.")]
     public async Task TestMcpClients()
     {
