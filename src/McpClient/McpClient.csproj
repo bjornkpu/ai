@@ -1,16 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<!--suppress CheckTagEmptyBody -->
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        
-        <Version>0.1.0</Version>
+
+
+        <Version></Version>
+
 
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>ai</ToolCommandName>
         <PackageId>bjornkpu.ai</PackageId>
+        <Authors>Bjørn Kristian Punsvik</Authors>
+        <Company>Punsvik</Company>
+        <Description>A powerful MCP CLI tool built with DotNET and Cocona.</Description>
+        <PackageTags>cli dotnet-tool cocona ai mcp</PackageTags>
+        <RepositoryUrl>https://github.com/bjornkpu/ai</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>

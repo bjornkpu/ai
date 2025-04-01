@@ -20,6 +20,10 @@ jobs:
         with:
           dotnet-version: '9.x' # Adjust based on your .NET version
 
+      # Navigate to the Tool project directory
+      - name: Navigate to project directory
+        working-directory: src/McpClient
+
       # Restore dependencies
       - name: Restore dependencies
         run: dotnet restore

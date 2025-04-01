@@ -1,4 +1,5 @@
-﻿using Cocona;
+﻿using System.Reflection;
+using Cocona;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
 
@@ -74,7 +75,12 @@ public class Commands(McpClientService mcpClientService, AzureOpenAIService azur
     [Command(Description = "Display the current version of the CLI.")]
     public void Version()
     {
-        Console.WriteLine("ai v1.0.0");
+        var version = Assembly
+            .GetExecutingAssembly()
+            .GetName()
+            .Version?.ToString() ?? "unknown";
+
+        Console.WriteLine($"ai v{version}");
     }
 
 
