@@ -93,20 +93,38 @@ public class Config
 
 public class McpConfig
 {
-    [JsonPropertyName("enabled")] public bool Enabled { get; set; } = true;
+    /// <summary>
+    ///     Whether the server is enabled
+    /// </summary>
+    [JsonPropertyName("enabled")]
+    public bool Enabled { get; set; } = true;
 
-    [JsonPropertyName("command")] public string Command { get; set; }
+    /// <summary>
+    ///     Command to run the server
+    /// </summary>
+    [JsonPropertyName("command")]
+    public required string Command { get; set; }
 
-    [JsonPropertyName("args")] public string[] Args { get; set; }
+    /// <summary>
+    ///     Command-line arguments
+    /// </summary>
+    [JsonPropertyName("args")]
+    public required string[] Args { get; set; }
+
+    /// <summary>
+    ///     Environment variables
+    /// </summary>
+    [JsonPropertyName("env")]
+    public Dictionary<string, string> Env { get; set; } = new();
 }
 
 public class LlmConfig
 {
-    [JsonPropertyName("provider")] public string Provider { get; set; }
+    [JsonPropertyName("provider")] public required string Provider { get; set; }
 
-    [JsonPropertyName("model")] public string Model { get; set; }
+    [JsonPropertyName("model")] public required string Model { get; set; }
 
-    [JsonPropertyName("api_key")] public string ApiKey { get; set; }
+    [JsonPropertyName("api_key")] public required string ApiKey { get; set; }
 
-    [JsonPropertyName("base_url")] public string BaseUrl { get; set; } // Optional
+    [JsonPropertyName("base_url")] public required string BaseUrl { get; set; } // Optional
 }
