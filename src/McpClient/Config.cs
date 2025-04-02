@@ -44,12 +44,15 @@ public class Config
         {
             var defaultConfig = CreateDefault();
             await SaveAsync(defaultConfig);
+            Console.WriteLine("Default configuration file created at " + ConfigPath);
+            Environment.Exit(0);
         }
 
         // Read and deserialize the file into a Config object
         var json = await File.ReadAllTextAsync(ConfigPath);
-        return JsonSerializer.Deserialize<Config>(json)
-               ?? throw new InvalidOperationException("Failed to deserialize the config");
+        var config = JsonSerializer.Deserialize<Config>(json)
+                     ?? throw new InvalidOperationException("Failed to deserialize the config");
+        return config;
     }
 
     /// <summary>
@@ -61,6 +64,7 @@ public class Config
         var json = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
         await File.WriteAllTextAsync(ConfigPath, json);
     }
+
 
     /// <summary>
     ///     Creates a default configuration object with default values.
@@ -76,7 +80,7 @@ public class Config
                 Provider = "azureOpenAI",
                 Model = "gpt-4o-mini",
                 ApiKey = "your-azure-openai-api-key",
-                BaseUrl = "https://<your service>.cognitiveservices.azure.com"
+                BaseUrl = "https://your_service.cognitiveservices.azure.com"
             },
             McpServers = new Dictionary<string, McpConfig>
             {
