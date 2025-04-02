@@ -34,6 +34,7 @@ public class Commands(McpClientService mcpClientService, AzureOpenAIService azur
         {
             new(ChatRole.System, config.SystemPrompt)
         };
+        conversationHistory.AddRange(LoadSystemPrompts("prompts"));
 
         Console.WriteLine("Start typing your messages below. Type 'exit' to quit.");
 
@@ -91,5 +92,14 @@ public class Commands(McpClientService mcpClientService, AzureOpenAIService azur
         {
             Console.WriteLine($"MCP client '{client.ServerInfo?.Name}' is connected.");
         }
+    }
+
+    private List<ChatMessage> LoadSystemPrompts(string promptsDirectory)
+    {
+        var promptFiles = Directory.GetFiles(promptsDirectory, "*.md");
+        return promptFiles.Select(File.ReadAllText)
+            .Where(content => !string.IsNullOrWhiteSpace(content))
+            .Select(content => new ChatMessage(ChatRole.System, content))
+            .ToList();
     }
 }
