@@ -55,8 +55,39 @@ public class Commands(McpClientService mcpClientService, AzureOpenAIService azur
 
                 var responseStream = chatClient.GetStreamingResponseAsync(conversationHistory, options);
                 var streamedResponse = "";
+
                 await foreach (var update in responseStream)
                 {
+                    if (
+                        update.FinishReason?.Value == "tool_calls"
+                        && update.Contents.FirstOrDefault() is FunctionCallContent content)
+                    {
+                        var toolName = content?.Name;
+                        var toolArguments = content?.Arguments;
+
+                        Console.WriteLine($"\nThe assistant wants to call the tool '{toolName}' with these arguments:");
+                        if (toolArguments != null)
+                        {
+                            foreach (var arg in toolArguments)
+                            {
+                                Console.WriteLine($"  - {arg.Key}: {arg.Value}");
+                            }
+                        }
+
+                        // Ask for user confirmation
+                        Console.Write("Do you want to allow this tool call? [y/n]: ");
+                        var userResponse = Console.ReadLine();
+
+                        if (userResponse?.Trim().ToLower() != "y")
+                        {
+                            Console.WriteLine("Tool execution denied.");
+                            conversationHistory.Add(new ChatMessage(ChatRole.Tool,
+                                $"Tool '{toolName}' blocked by the user."));
+                            break;
+                        }
+                    }
+
+                    // Normal response handling
                     Console.Write(update.Text);
                     streamedResponse += update.Text;
                 }
