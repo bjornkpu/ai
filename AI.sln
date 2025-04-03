@@ -9,11 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8DD086CE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpClient", "src\McpClient\McpClient.csproj", "{D98DC704-D365-456D-9383-88C2B4AC6B34}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".llm", ".llm", "{6B75C341-35E0-42E2-B808-48B84C8589BE}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\.llm\config.json = ..\..\.llm\config.json
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
