@@ -34,7 +34,7 @@ public class Commands(McpClientService mcpClientService, AzureOpenAIService azur
         {
             new(ChatRole.System, config.SystemPrompt)
         };
-        conversationHistory.AddRange(LoadSystemPrompts("prompts"));
+        conversationHistory.AddRange(LoadSystemPrompts());
 
         Console.WriteLine("Start typing your messages below. Type 'exit' to quit.");
 
@@ -94,9 +94,9 @@ public class Commands(McpClientService mcpClientService, AzureOpenAIService azur
         }
     }
 
-    private List<ChatMessage> LoadSystemPrompts(string promptsDirectory)
+    private List<ChatMessage> LoadSystemPrompts()
     {
-        var promptFiles = Directory.GetFiles(promptsDirectory, "*.md");
+        var promptFiles = Directory.GetFiles(config.PromptsDir, "*.md");
         return promptFiles.Select(File.ReadAllText)
             .Where(content => !string.IsNullOrWhiteSpace(content))
             .Select(content => new ChatMessage(ChatRole.System, content))

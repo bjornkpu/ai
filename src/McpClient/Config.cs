@@ -11,6 +11,12 @@ public class Config
         "config.json"
     );
 
+    public readonly string PromptsDir = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+        ".llm",
+        "prompts"
+    );
+
     [JsonPropertyName("systemPrompt")] public string SystemPrompt { get; set; }
 
     [JsonPropertyName("llm")] public LlmConfig Llm { get; set; }
