@@ -29,10 +29,4 @@
         <PackageReference Include="ModelContextProtocol" Version="0.1.0-preview.2"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <None Update="prompts\memory-system-prompt.md">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
 </Project>
