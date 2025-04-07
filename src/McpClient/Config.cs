@@ -59,29 +59,18 @@ public class Config
         var config = JsonSerializer.Deserialize<Config>(json)
                      ?? throw new InvalidOperationException("Failed to deserialize the config");
 
-        config.ResolveArgsWithEnv();
+        config.SetEnv();
 
         return config;
     }
 
-    private void ResolveArgsWithEnv()
+    public void SetEnv()
     {
         foreach (var server in McpServers)
         {
-            var env = server.Value.Env;
-            var args = server.Value.Args;
-
-            if (env.Count == 0 || args.Length == 0)
+            foreach (var (key, value) in server.Value.Env)
             {
-                continue;
-            }
-
-            for (var i = 0; i < args.Length; i++)
-            {
-                foreach (var (key, value) in env)
-                {
-                    args[i] = args[i].Replace(key, value);
-                }
+                Environment.SetEnvironmentVariable(key, value);
             }
         }
     }

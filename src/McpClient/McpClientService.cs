@@ -15,7 +15,7 @@ public class McpClientService(Config config)
         {
             if (!serverConfig.Value.Enabled)
             {
-                Console.WriteLine($"MCP server '{serverConfig.Key}' is disabled. Skipping...");
+                // Console.WriteLine($"MCP server '{serverConfig.Key}' is disabled. Skipping...");
                 continue;
             }
 
@@ -35,6 +35,9 @@ public class McpClientService(Config config)
                         ["arguments"] = string.Join(" ", serverConfig.Value.Args)
                     }
                 };
+
+                // Console.WriteLine($"command:   {mcpServerConfig.TransportOptions["command"]}");
+                // Console.WriteLine($"arguments: {mcpServerConfig.TransportOptions["arguments"]}");
 
                 var client = await McpClientFactory.CreateAsync(mcpServerConfig);
                 clients.Add(client);
