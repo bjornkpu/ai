@@ -11,7 +11,7 @@ public class Config
         "config.json"
     );
 
-    public readonly string PromptsDir = Path.Combine(
+    public static readonly string PromptsDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
         ".llm",
         "prompts"
@@ -43,6 +43,11 @@ public class Config
         if (!Directory.Exists(configDir))
         {
             Directory.CreateDirectory(configDir);
+        }
+
+        if (!Directory.Exists(PromptsDir))
+        {
+            Directory.CreateDirectory(PromptsDir);
         }
 
         // If the config file does not exist, create it with default values
